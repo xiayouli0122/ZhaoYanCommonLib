@@ -1,4 +1,4 @@
-package com.zhaoyan.common.utils;
+package com.zhaoyan.common.bitmaps;
 
 import java.io.ByteArrayOutputStream;
 
