@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<array name="ext_image">
+    <item>png</item>
+    <item>gif</item>
+    <item>jpg</item>
+    <item>jpeg</item>
+    <item>bmp</item>
+    <item>mpo</item>
+</array>
+<array name="ext_audio">
+    <item>mp3</item>
+    <item>wav</item>
+    <item>ogg</item>
+    <item>midi</item>
+    <item>wma</item>
+    <item>amr</item>
+</array>
+<array name="ext_archive">
+    <item>zip</item>
+    <item>rar</item>
+</array>
+<array name="ext_webtext">
+    <item>htm</item>
+    <item>html</item>
+    <item>php</item>
+</array>
+<array name="ext_video">
+    <item>mp4</item>
+    <item>rm</item>
+    <item>rmvb</item>
+    <item>3gpp</item>
+    <item>3gp</item>
+    <item>avi</item>
+    <item>mpeg</item>
+    <item>mpg</item>
+    <item>mov</item>
+    <item>mkv</item>
+    <item>flv</item>
+    <item>swf</item>
+    <item>asf</item>
+    <item>wmv</item>
+</array>
+<array name="ext_apk">
+    <item>apk</item>
+</array>
+<array name="ext_word">
+    <item>doc</item>
+    <item>docx</item>
+</array>
+<array name="ext_ppt">
+    <item>ppt</item>
+    <item>pptx</item>
+    <item>pps</item>
+    <item>ppsx</item>
+</array>
+<array name="ext_excel">
+    <item>xls</item>
+    <item>xlsx</item>
+</array>
+<array name="ext_pdf">
+    <item>pdf</item>
+</array>
+<array name="ext_ebook">
+    <item>txt</item>
+    <item>uml</item>
+    <item>ebk</item>
+    <item>chm</item>
+</array>
+<array name="ext_program">
+    <item>sh</item>
+    <item>java</item>
+    <item>c</item>
+    <item>cpp</item>
+    <item>xml</item>
+</array>
+<!-- Category files -->
+<array name="Category_files_ending">
+    <item>.doc</item>
+    <item>.docx</item>
+    <item>.xls</item>
+    <item>.xlsx</item>
+    <item>.ppt</item>
+    <item>.pptx</item>
+    <item>.pps</item>
+    <item>.ppsx</item>
+    <item>.pdf</item>
+    <item>.txt</item>
+    <item>.uml</item>
+    <item>.ebk</item>
+    <item>.chm</item>
+    <item>.apk</item>
+    <item>.jar</item>
+    <item>.zip</item>
+    <item>.rar</item>
+    <item>.gz</item>
+    <item>.7z</item>
+    <item>.iso</item>
+</array>
+<array name="doc_file">
+    <item>.doc</item>
+    <item>.docx</item>
+    <item>.xls</item>
+    <item>.xlsx</item>
+    <item>.ppt</item>
+    <item>.pptx</item>
+    <item>.pps</item>
+    <item>.ppsx</item>
+    <item>.pdf</item>
+    <item>.txt</item>
+    <item>.uml</item>
+    <item>.ebk</item>
+    <item>.chm</item>
+</array>
+<array name="apk_file">
+    <item>.apk</item>
+</array>
+<array name="archive_file">
+    <item>.zip</item>
+    <item>.rar</item>
+</array>
+</resources>
