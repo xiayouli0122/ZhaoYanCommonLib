@@ -1,5 +1,6 @@
 package com.zhaoyan.common.utils;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
@@ -15,10 +16,13 @@ import java.util.Set;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
+import android.os.Handler;
 import android.os.StatFs;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 public class Utils {
 	private static final String TAG = Utils.class.getSimpleName();
@@ -218,5 +222,40 @@ public class Utils {
             localException.printStackTrace();
         }
     }
+     
+     /**
+ 	 * show the input method mannual
+ 	 * @param v the view that need show input method,like edittext
+ 	 * @param hasFocus
+ 	 */
+ 	public static void onFocusChange(final View v, boolean hasFocus) {
+ 		final boolean isFocus = hasFocus;
+ 		(new Handler()).postDelayed(new Runnable() {
+ 			public void run() {
+ 				InputMethodManager imm = (InputMethodManager) v.getContext()
+ 						.getSystemService(Context.INPUT_METHOD_SERVICE);
+ 				if (isFocus) {
+ 					imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+ 				} else {
+ 					imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+ 				}
+ 			}
+ 		}, 500);
+ 	}
+ 	
+ 	/**
+	 * show input method in view
+	 * @param context
+	 * @param view
+	 */
+	public static void showInputMethod(Context context, View view){
+		InputMethodManager im = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		im.showSoftInput(view, 0);
+	}
+	
+	public static String getParentPath(String path){
+		File file = new File(path);
+		return file.getParent();
+	}
 	
 }

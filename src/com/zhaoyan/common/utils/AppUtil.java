@@ -1,76 +1,72 @@
 package com.zhaoyan.common.utils;
 
-import android.app.Activity;
-import android.app.Application;
-import android.app.Service;
-import android.content.ComponentName;
-import android.content.pm.ActivityInfo;
+import java.io.File;
+
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.ServiceInfo;
+import android.net.Uri;
 import android.util.Log;
 
 public class AppUtil {
 	private static final String TAG = "AppUtil";
-	public static final String META_DATA_APP_ID = "app_id";
-
-	/**
-	 * Get app id which set by activity.
-	 * 
-	 * @param activity
-	 * @return
-	 */
-	public static int getAppID(Activity activity) {
-		int appID = 0;
-		try {
-			ActivityInfo activityInfo = activity.getPackageManager()
-					.getActivityInfo(activity.getComponentName(),
-							PackageManager.GET_META_DATA);
-			appID = activityInfo.metaData.getInt(META_DATA_APP_ID);
-		} catch (NameNotFoundException e) {
-			Log.e(TAG, "getAppID fail. " + e);
+	
+	public static void installApk(Context context, String apkFilePath) {
+		if (apkFilePath.endsWith(".apk")) {
+			installApk(context, new File(apkFilePath));
 		}
-		return appID;
 	}
 
-	/**
-	 * Get app id which set by application.
-	 * 
-	 * @param application
-	 * @return
-	 */
-	public static int getAppID(Application application) {
-		int appID = 0;
-		try {
-			ApplicationInfo applicationInfo = application.getPackageManager()
-					.getApplicationInfo(application.getPackageName(),
-							PackageManager.GET_META_DATA);
-			appID = applicationInfo.metaData.getInt(META_DATA_APP_ID);
-		} catch (NameNotFoundException e) {
-			Log.e(TAG, "getAppID fail. " + e);
-		}
-		return appID;
+	public static void installApk(Context context, File file) {
+		Intent intent = new Intent();
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.setAction(android.content.Intent.ACTION_VIEW);
+		Uri uri = Uri.fromFile(file);
+		intent.setDataAndType(uri, "application/vnd.android.package-archive");
+		context.startActivity(intent);
 	}
-
-	/**
-	 * Get app id which set by service.
-	 * 
-	 * @param service
-	 * @return
-	 */
-	public static int getAppID(Service service) {
-		int appID = 0;
+	
+	public static void uninstallApp(Context context, String packageName){
+		Uri packageUri = Uri.parse("package:" + packageName);
+		Intent deleteIntent = new Intent();
+		deleteIntent.setAction(Intent.ACTION_DELETE);
+		deleteIntent.setData(packageUri);
+		context.startActivity(deleteIntent);
+	}
+	
+	public static String getAppLabel(String packageName, PackageManager pm){
+		ApplicationInfo applicationInfo = null;
 		try {
-			ServiceInfo serviceInfo = service.getPackageManager()
-					.getServiceInfo(
-							new ComponentName(service.getPackageName(), service
-									.getClass().getName()),
-							PackageManager.GET_META_DATA);
-			appID = serviceInfo.metaData.getInt(META_DATA_APP_ID);
+			applicationInfo = pm.getApplicationInfo(packageName, 0);
 		} catch (NameNotFoundException e) {
-			Log.e(TAG, "getAppID fail. " + e);
+			Log.e(TAG, "getAppLabel.name not found:" + packageName);
+			Log.e(TAG, e.toString());
+			return null;
 		}
-		return appID;
+		return applicationInfo.loadLabel(pm).toString();
+	}
+	
+	public static String getAppVersion(String packageName, PackageManager pm){
+		String version = "";
+		try {
+			version = pm.getPackageInfo(packageName, 0).versionName;
+		} catch (NameNotFoundException e) {
+			Log.e(TAG, "getAppVersion.name not found:" + packageName);
+			e.printStackTrace();
+		}
+		return version;
+	}
+	
+	public static String getAppSourceDir(String packageName, PackageManager pm){
+		ApplicationInfo applicationInfo = null;
+		try {
+			applicationInfo = pm.getApplicationInfo(packageName, 0);
+		} catch (NameNotFoundException e) {
+			Log.e(TAG, "getAppSourceDir:" + packageName + " name not found.");
+			e.printStackTrace();
+		}
+		return applicationInfo.sourceDir;
 	}
 }

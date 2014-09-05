@@ -17,7 +17,7 @@ import com.zhaoyan.common.lib.R;
 import com.zhaoyan.common.utils.Log;
 
 public class ActionMenuInflater {
-	private static final String TAG = "MenuInflater";
+	private static final String TAG = ActionMenuInflater.class.getSimpleName();
 
     /** Menu tag name in XML. */
     private static final String XML_MENU = "menu";
@@ -160,13 +160,13 @@ public class ActionMenuInflater {
             itemIconDisableResId = a.getResourceId(R.styleable.ZyMenuItem_iconDisable, 0);
             itemEnabled = a.getBoolean(R.styleable.ZyMenuItem_enable, defaultItemEnabled);
             
-//            Log.d(TAG, "=============getItem===========");
-//            Log.d(TAG, "itemId=" + itemId);
-//            Log.d(TAG, "itemTitle=" + itemTitle);
-//            Log.d(TAG, "itemIconEnableResId=" + itemIconEnableResId);
-//            Log.d(TAG, "itemIconDisableResId=" + itemIconDisableResId);
-//            Log.d(TAG, "itemEnabled=" + itemEnabled);
-//            Log.d(TAG, "=============getItem===========");
+            Log.d(TAG, "=============getItem===========");
+            Log.d(TAG, "itemId=" + itemId);
+            Log.d(TAG, "itemTitle=" + itemTitle);
+            Log.d(TAG, "itemIconEnableResId=" + itemIconEnableResId);
+            Log.d(TAG, "itemIconDisableResId=" + itemIconDisableResId);
+            Log.d(TAG, "itemEnabled=" + itemEnabled);
+            Log.d(TAG, "=============getItem===========");
             a.recycle();
 
         }
