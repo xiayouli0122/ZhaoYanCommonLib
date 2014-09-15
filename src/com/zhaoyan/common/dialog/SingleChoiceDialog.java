@@ -40,7 +40,7 @@ public class SingleChoiceDialog extends ZyDialogBuilder implements OnItemClickLi
 		
 		setDuration(0);
 		setMessage(null);
-		setCustomView(customView, context);
+		setCustomView(customView);
 	}
 	
 	public void setItemList(List<String> list){

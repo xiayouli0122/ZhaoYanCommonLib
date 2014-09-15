@@ -1,12 +1,9 @@
 package com.zhaoyan.common.dialog;
 
-import com.zhaoyan.common.lib.R;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +15,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class ZyDialogBuilder extends Dialog implements DialogInterface {
+import com.zhaoyan.common.lib.R;
+
+public class ZyDialogBuilder extends Dialog {
 
     private final String defTextColor="#FFFFFFFF";
     private final String defDividerColor="#11000000";
     private final String defMsgColor="#FFFFFFFF";
     private final String defDialogColor="#FFE74C3C";
 
-
+    private Context mContext;
 
     private Effectstype type=null;
 
@@ -37,30 +36,50 @@ public class ZyDialogBuilder extends Dialog implements DialogInterface {
 
     private View mDialogView;
     private View mDivider;
+    private View mButtonView;
 
-    private TextView mTitle;
-    private TextView mMessage;
+    private TextView mTitleView;
+    private ImageView mIconView;
+    private TextView mMessageView;
 
-    private ImageView mIcon;
     private Button mButton1;
     private Button mButton2;
+    private Button mButton3;
     
     private View mDivideOne;
+    private View mDivideTwo;
 
     private int mDuration = -1;
-
-    private boolean isCancelable=true;
+    
+    private String mTitle;
+	private String mMessage;
+	private int mIconResId = -1;
+	
+	private boolean mHasMessage = false;
+	private boolean mShowTitle = false;
+	private boolean mShowNegativeBtn = false;
+	private boolean mShowPositiveBtn = false;
+	private boolean mShowNeutralBtn = false;
+	
+	private String mNegativeMessage,mPositiveMessage,mNeutralMessage;
+	
+	private onZyDialogClickListener mNegativeListener;
+	private onZyDialogClickListener mPositiveListener;
+	private onZyDialogClickListener mNeutralListener;
 
     private volatile static ZyDialogBuilder instance;
+    
+    public interface onZyDialogClickListener{
+		void onClick(Dialog dialog);
+	}
 
     public ZyDialogBuilder(Context context) {
         super(context);
-        init(context);
-
+        mContext = context;
     }
     public ZyDialogBuilder(Context context,int theme) {
         super(context, theme);
-        init(context);
+        mContext = context;
     }
 
     @Override
@@ -70,6 +89,8 @@ public class ZyDialogBuilder extends Dialog implements DialogInterface {
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
         params.width  = ViewGroup.LayoutParams.MATCH_PARENT;
         getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+        
+        init(mContext);
     }
 
     public static ZyDialogBuilder getInstance(Context context) {
@@ -84,8 +105,6 @@ public class ZyDialogBuilder extends Dialog implements DialogInterface {
     }
 
     private void init(Context context) {
-
-
         mDialogView = View.inflate(context, R.layout.nifty_dialog_layout, null);
         
         mLinearLayoutView=(LinearLayout)mDialogView.findViewById(R.id.parentPanel);
@@ -93,43 +112,115 @@ public class ZyDialogBuilder extends Dialog implements DialogInterface {
         mLinearLayoutTopView=(LinearLayout)mDialogView.findViewById(R.id.topPanel);
         mLinearLayoutMsgView=(LinearLayout)mDialogView.findViewById(R.id.contentPanel);
         mFrameLayoutCustomView=(FrameLayout)mDialogView.findViewById(R.id.customPanel);
-
-        mTitle = (TextView) mDialogView.findViewById(R.id.alertTitle);
-        mTitle.setTextColor(Color.WHITE);
-        mMessage = (TextView) mDialogView.findViewById(R.id.message);
-        mIcon = (ImageView) mDialogView.findViewById(R.id.icon);
-        mDivider = mDialogView.findViewById(R.id.titleDivider);
-        mButton1=(Button)mDialogView.findViewById(R.id.button1);
-        mButton2=(Button)mDialogView.findViewById(R.id.button2);
         
-        mDivideOne = mDialogView.findViewById(R.id.divider_one);
+        if (mShowTitle) {
+        	mLinearLayoutTopView.setVisibility(View.VISIBLE);
+        	 mTitleView = (TextView) mDialogView.findViewById(R.id.alertTitle);
+             mTitleView.setTextColor(Color.WHITE);
+             mTitleView.setText(mTitle);
+             
+             mIconView = (ImageView) mDialogView.findViewById(R.id.icon);
+             if (mIconResId != -1) {
+            	 mIconView.setImageResource(mIconResId);
+			}
+		} else {
+			mLinearLayoutTopView.setVisibility(View.GONE);
+		}
+        
+        if (mHasMessage) {
+        	mLinearLayoutMsgView.setVisibility(View.VISIBLE);
+        	mMessageView = (TextView) mDialogView.findViewById(R.id.message);
+        	mMessageView.setText(mMessage);
+		} else {
+			mLinearLayoutMsgView.setVisibility(View.GONE);
+		}
+
+        mButtonView = mDialogView.findViewById(R.id.button_layout);
+        
+        if (!mShowNegativeBtn && !mShowPositiveBtn && !mShowNeutralBtn) {
+			mButtonView.setVisibility(View.GONE);
+		}else {
+			if (mShowNegativeBtn) {
+				mButton1=(Button)mDialogView.findViewById(R.id.button1);
+				mButton1.setText(mNegativeMessage);
+				mButton1.setVisibility(View.VISIBLE);
+				mButton1.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if (null == mNegativeListener) {
+							dismiss();
+						} else {
+							mNegativeListener.onClick(ZyDialogBuilder.this);
+						}
+					}
+				});
+			}
+			
+			if (mShowNeutralBtn) {
+				mButton2=(Button)mDialogView.findViewById(R.id.button2);
+				mButton2.setText(mNeutralMessage);
+				mButton2.setVisibility(View.VISIBLE);
+				mButton2.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if (null == mNeutralListener) {
+							dismiss();
+						} else {
+							mNeutralListener.onClick(ZyDialogBuilder.this);
+						}
+					}
+				});
+			}
+			
+			if (mShowPositiveBtn) {
+				 mButton3 = (Button) mDialogView.findViewById(R.id.button3);
+				 mButton3.setText(mPositiveMessage);
+				 mButton3.setVisibility(View.VISIBLE);
+				 mButton3.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							if (null == mPositiveListener) {
+								dismiss();
+							} else {
+								mPositiveListener.onClick(ZyDialogBuilder.this);
+							}
+						}
+					});
+			}
+			
+			mDivideOne = mDialogView.findViewById(R.id.divider_one);
+			mDivideTwo = mDialogView.findViewById(R.id.divider_two);
+			if (mShowNegativeBtn && mShowNeutralBtn) {
+				mDivideOne.setVisibility(View.VISIBLE);
+			}
+			
+			if (mShowNeutralBtn && mShowPositiveBtn) {
+				mDivideTwo.setVisibility(View.VISIBLE);
+			}
+			
+			if (mShowNegativeBtn && mShowPositiveBtn) {
+				mDivideOne.setVisibility(View.VISIBLE);
+			}
+		}
         
         setContentView(mDialogView);
         this.setOnShowListener(new OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-
                 mLinearLayoutView.setVisibility(View.VISIBLE);
                 if(type==null){
                     type=Effectstype.SlideBottom;
                 }
                 start(type);
-
-
             }
         });
-//        mRlinearLayoutView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (isCancelable)dismiss();
-//            }
-//        });
     }
+    
 
     public void toDefault(){
-        mTitle.setTextColor(Color.parseColor(defTextColor));
+        mTitleView.setTextColor(Color.parseColor(defTextColor));
         mDivider.setBackgroundColor(Color.parseColor(defDividerColor));
-        mMessage.setTextColor(Color.parseColor(defMsgColor));
+        mMessageView.setTextColor(Color.parseColor(defMsgColor));
         mLinearLayoutView.setBackgroundColor(Color.parseColor(defDialogColor));
     }
 
@@ -140,39 +231,29 @@ public class ZyDialogBuilder extends Dialog implements DialogInterface {
 
 
     public ZyDialogBuilder setDialogTitle(CharSequence title) {
-        toggleView(mLinearLayoutTopView,title);
-        mTitle.setText(title);
+    	mShowTitle= true;
+    	mTitle = (String) title;
         return this;
     }
-
-    public ZyDialogBuilder setTitleColor(String colorString) {
-        mTitle.setTextColor(Color.parseColor(colorString));
-        return this;
+    
+    public ZyDialogBuilder setDialogTitle(int resId) {
+    	String title = mContext.getString(resId);
+        return setDialogTitle(title);
     }
 
     public ZyDialogBuilder setMessage(int textResId) {
-        toggleView(mLinearLayoutMsgView,textResId);
-        mMessage.setText(textResId);
-        return this;
+    	String msg = mContext.getString(textResId);
+        return setMessage(msg);
     }
 
     public ZyDialogBuilder setMessage(CharSequence msg) {
-        toggleView(mLinearLayoutMsgView,msg);
-        mMessage.setText(msg);
-        return this;
-    }
-    public ZyDialogBuilder setMessageColor(String colorString) {
-        mMessage.setTextColor(Color.parseColor(colorString));
+    	mHasMessage = true;
+    	mMessage = (String) msg;
         return this;
     }
 
     public ZyDialogBuilder setIcon(int drawableResId) {
-        mIcon.setImageResource(drawableResId);
-        return this;
-    }
-
-    public ZyDialogBuilder setIcon(Drawable icon) {
-        mIcon.setImageDrawable(icon);
+        mIconResId = drawableResId;
         return this;
     }
 
@@ -186,32 +267,38 @@ public class ZyDialogBuilder extends Dialog implements DialogInterface {
         return this;
     }
     
-    public ZyDialogBuilder setButtonDrawable(int resid) {
-        mButton1.setBackgroundResource(resid);
-        mButton2.setBackgroundResource(resid);
-        return this;
-    }
-    
-    public ZyDialogBuilder setButtonClick(int which, CharSequence text, View.OnClickListener clickListener){
-    	switch (which) {
-		case BUTTON1:
-			toggleView(mButton1,text);
-	        mButton1.setText(text);
-	        mButton1.setOnClickListener(clickListener);
-			break;
-		case BUTTON2:
-			toggleView(mButton2,text);
-	        mButton2.setText(text);
-	        mButton2.setOnClickListener(clickListener);
-	        mDivideOne.setVisibility(View.VISIBLE);
-			break;
-
-		default:
-			break;
-		}
-    	return this;
-    }
-
+    public void setNegativeButton(String text, onZyDialogClickListener listener){
+		mNegativeMessage = text;
+		mShowNegativeBtn = true;
+		mNegativeListener = listener;
+	}
+	
+	public void setNegativeButton(int textId, onZyDialogClickListener listener){
+		String text = mContext.getString(textId);
+		setNegativeButton(text, listener);
+	}
+	
+	public void setPositiveButton(String text, onZyDialogClickListener listener){
+		mPositiveMessage = text;
+		mShowPositiveBtn = true;
+		mPositiveListener = listener;
+	}
+	
+	public void setPositiveButton(int textId, onZyDialogClickListener listener){
+		String text = mContext.getString(textId);
+		setPositiveButton(text, listener);
+	}
+	
+	public void setNeutralButton(String text, onZyDialogClickListener listener){
+		mNeutralMessage = text;
+		mShowNeutralBtn = true;
+		mNeutralListener = listener;
+	}
+	
+	public void setNeutralButton(int textId, onZyDialogClickListener listener){
+		String text = mContext.getString(textId);
+		setPositiveButton(text, listener);
+	}
 
     public ZyDialogBuilder setCustomView(int resId, Context context) {
         View customView = View.inflate(context, resId, null);
@@ -222,23 +309,11 @@ public class ZyDialogBuilder extends Dialog implements DialogInterface {
         return this;
     }
 
-    public ZyDialogBuilder setCustomView(View view, Context context) {
+    public ZyDialogBuilder setCustomView(View view) {
         if (mFrameLayoutCustomView.getChildCount()>0){
             mFrameLayoutCustomView.removeAllViews();
         }
         mFrameLayoutCustomView.addView(view);
-
-        return this;
-    }
-    public ZyDialogBuilder isCancelableOnTouchOutside(boolean cancelable) {
-        this.isCancelable=cancelable;
-        this.setCanceledOnTouchOutside(cancelable);
-        return this;
-    }
-
-    public ZyDialogBuilder isCancelable(boolean cancelable) {
-        this.isCancelable=cancelable;
-        this.setCancelable(cancelable);
         return this;
     }
 
@@ -249,10 +324,39 @@ public class ZyDialogBuilder extends Dialog implements DialogInterface {
             view.setVisibility(View.VISIBLE);
         }
     }
+    
+//    @Override
+//	public void onClick(View v) {
+//		switch (v.getId()) {
+//		case R.id.button1:
+//			if (null == mNegativeListener) {
+//				dismiss();
+//			}else {
+//				mNegativeListener.onClick(this);
+//			}
+//			break;
+//		case R.id.button2:
+//			if (null == mPositiveListener) {
+//				dismiss();
+//			}else {
+//				mPositiveListener.onClick(this);
+//			}
+//			break;
+//		case R.id.button3:
+//			if (null == mNeutralListener) {
+//				dismiss();
+//			}else {
+//				mNeutralListener.onClick(this);
+//			}
+//			break;
+//		default:
+//			break;
+//		}
+//	}
+    
     @Override
     public void show() {
-
-        if (mTitle.getText().equals("")) mDialogView.findViewById(R.id.topPanel).setVisibility(View.GONE);
+//        if (mTitleView.getText().equals("")) mDialogView.findViewById(R.id.topPanel).setVisibility(View.GONE);
         super.show();
     }
 
@@ -263,11 +367,5 @@ public class ZyDialogBuilder extends Dialog implements DialogInterface {
         }
         animator.start(mRlinearLayoutView);
     }
-
-    @Override
-    public void dismiss() {
-        super.dismiss();
-        mButton1.setVisibility(View.GONE);
-        mButton2.setVisibility(View.GONE);
-    }
+	
 }
