@@ -33,6 +33,8 @@ public class ZyDialogBuilder extends Dialog {
     private LinearLayout mLinearLayoutMsgView;
     private LinearLayout mLinearLayoutTopView;
     private FrameLayout mFrameLayoutCustomView;
+    
+    private View mCustomView;
 
     private View mDialogView;
     private View mDivider;
@@ -112,6 +114,13 @@ public class ZyDialogBuilder extends Dialog {
         mLinearLayoutTopView=(LinearLayout)mDialogView.findViewById(R.id.topPanel);
         mLinearLayoutMsgView=(LinearLayout)mDialogView.findViewById(R.id.contentPanel);
         mFrameLayoutCustomView=(FrameLayout)mDialogView.findViewById(R.id.customPanel);
+        
+        if (mCustomView != null) {
+        	 if (mFrameLayoutCustomView.getChildCount()>0){
+                 mFrameLayoutCustomView.removeAllViews();
+             }
+             mFrameLayoutCustomView.addView(mCustomView);
+		}
         
         if (mShowTitle) {
         	mLinearLayoutTopView.setVisibility(View.VISIBLE);
@@ -302,18 +311,12 @@ public class ZyDialogBuilder extends Dialog {
 
     public ZyDialogBuilder setCustomView(int resId, Context context) {
         View customView = View.inflate(context, resId, null);
-        if (mFrameLayoutCustomView.getChildCount()>0){
-            mFrameLayoutCustomView.removeAllViews();
-        }
-        mFrameLayoutCustomView.addView(customView);
+       mCustomView = customView;
         return this;
     }
 
     public ZyDialogBuilder setCustomView(View view) {
-        if (mFrameLayoutCustomView.getChildCount()>0){
-            mFrameLayoutCustomView.removeAllViews();
-        }
-        mFrameLayoutCustomView.addView(view);
+        mCustomView = view;
         return this;
     }
 
@@ -324,35 +327,6 @@ public class ZyDialogBuilder extends Dialog {
             view.setVisibility(View.VISIBLE);
         }
     }
-    
-//    @Override
-//	public void onClick(View v) {
-//		switch (v.getId()) {
-//		case R.id.button1:
-//			if (null == mNegativeListener) {
-//				dismiss();
-//			}else {
-//				mNegativeListener.onClick(this);
-//			}
-//			break;
-//		case R.id.button2:
-//			if (null == mPositiveListener) {
-//				dismiss();
-//			}else {
-//				mPositiveListener.onClick(this);
-//			}
-//			break;
-//		case R.id.button3:
-//			if (null == mNeutralListener) {
-//				dismiss();
-//			}else {
-//				mNeutralListener.onClick(this);
-//			}
-//			break;
-//		default:
-//			break;
-//		}
-//	}
     
     @Override
     public void show() {

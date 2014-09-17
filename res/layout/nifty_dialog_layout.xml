@@ -3,8 +3,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="25dp"
-    android:paddingRight="25dp">
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    >
 
     <LinearLayout
         android:id="@+id/parentPanel"

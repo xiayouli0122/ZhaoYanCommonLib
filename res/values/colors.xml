@@ -7,4 +7,11 @@
     
     <color name="dialog_bg">#fff9f0f0</color>
     <color name="divider_color">#11000000</color>
+    
+    <color name="table_title_selected">#5d91be</color>
+    <color name="table_title_unselected">#696969</color>
+    
+    <color name="holo_blue_light">#ff33b5e5</color>
+    <color name="holo_blue_light_transparent">#3f33b5e5</color>
+    <color name="holo_blue_light_transparent2">#7f33b5e5</color>
 </resources>
