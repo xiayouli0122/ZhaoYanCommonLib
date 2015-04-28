@@ -69,6 +69,26 @@ public class Log {
 			mLogcatSaver.start();
 		}
 	}
+	
+	/**
+	 * Start saving log to file.
+	 */
+	public static void startSaveToFile(String dirPath) {
+		Log.d(TAG, "startSaveToFile");
+		stopAndSave();
+		if (isWriteToFile) {
+			mLogFile = new LogFile(dirPath, TimeUtil.getCurrentTime() + ".txt");
+			mLogFile.open();
+			mLogFile.writeLog("**********Start Writing Log at time "
+					+ TimeUtil.getCurrentTime() + "**********\n");
+		}
+
+		if (isSaveLogcat) {
+			mLogcatSaver = new LogcatSaver(dirPath, TimeUtil.getCurrentTime()
+					+ "_logcat.txt");
+			mLogcatSaver.start();
+		}
+	}
 
 	/**
 	 * Stop log saving.

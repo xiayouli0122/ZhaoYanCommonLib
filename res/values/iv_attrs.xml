@@ -28,4 +28,9 @@
     
     <attr name="checkableImageViewStyle" format="reference" />
     
+    <attr name="borderWidth" format="dimension"></attr>
+    <declare-styleable name="CircularProgress">
+        <attr name="borderWidth"/>
+    </declare-styleable>
+    
 </resources>

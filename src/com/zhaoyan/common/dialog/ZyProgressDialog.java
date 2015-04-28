@@ -18,14 +18,13 @@ public class ZyProgressDialog extends ZyDialogBuilder {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
 		View customeView = getLayoutInflater().inflate(R.layout.progress_dialog, null);
 		if (mMessage != null) {
 			TextView textView = (TextView) customeView.findViewById(R.id.tv_pd_message);
 			textView.setText(mMessage);
 		}
 		setCustomView(customeView);
+		super.onCreate(savedInstanceState);
 	}
 
 	public void setDialogMessage(String message) {

@@ -23,10 +23,13 @@ public class ZyDialogBuilder extends Dialog {
     private final String defDividerColor="#11000000";
     private final String defMsgColor="#FFFFFFFF";
     private final String defDialogColor="#FFE74C3C";
+    
+    private int mTitleColor;
+    private int mTitleTextColor;
 
     private Context mContext;
 
-    private Effectstype type=null;
+    private Effectstype mEffectstype = null;
 
     private LinearLayout mLinearLayoutView;
     private RelativeLayout mRlinearLayoutView;
@@ -76,7 +79,7 @@ public class ZyDialogBuilder extends Dialog {
 	}
 
     public ZyDialogBuilder(Context context) {
-        super(context);
+        super(context, R.style.dialog_untran);
         mContext = context;
     }
     public ZyDialogBuilder(Context context,int theme) {
@@ -217,10 +220,11 @@ public class ZyDialogBuilder extends Dialog {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 mLinearLayoutView.setVisibility(View.VISIBLE);
-                if(type==null){
-                    type=Effectstype.SlideBottom;
+                if(mEffectstype==null){
+//                    mEffectstype=Effectstype.SlideBottom;
+                	return;
                 }
-                start(type);
+                start(mEffectstype);
             }
         });
     }
@@ -249,6 +253,11 @@ public class ZyDialogBuilder extends Dialog {
     	String title = mContext.getString(resId);
         return setDialogTitle(title);
     }
+    
+    public ZyDialogBuilder setTitleColor(int colorResId){
+    	
+    	return this;
+    }
 
     public ZyDialogBuilder setMessage(int textResId) {
     	String msg = mContext.getString(textResId);
@@ -272,7 +281,7 @@ public class ZyDialogBuilder extends Dialog {
     }
 
     public ZyDialogBuilder setEffect(Effectstype type) {
-        this.type=type;
+        this.mEffectstype=type;
         return this;
     }
     

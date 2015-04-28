@@ -117,7 +117,7 @@ public class FileDeleteHelper {
         new AsyncTask<Void, Void, Void>() {
         	protected void onPreExecute() {
         		progressDialog = new ZyProgressDialog(mContext);
-        		progressDialog.setMessage(R.string.deleting);
+        		progressDialog.setDialogMessage(R.string.deleting);
         		progressDialog.show();
         	};
         	

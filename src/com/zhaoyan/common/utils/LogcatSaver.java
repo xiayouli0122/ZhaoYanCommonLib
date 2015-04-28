@@ -18,6 +18,10 @@ public class LogcatSaver {
 	public LogcatSaver(String fileName) {
 		mLogFile = new LogFile(fileName);
 	}
+	
+	public LogcatSaver(String dirPath, String fileName) {
+		mLogFile = new LogFile(dirPath, fileName);
+	}
 
 	public boolean isRunning() {
 		return mRunning;

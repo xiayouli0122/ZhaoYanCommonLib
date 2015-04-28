@@ -43,6 +43,15 @@ public class LogFile {
 	public LogFile(String fileName) {
 		this(null, fileName);
 	}
+	
+	/**
+	 * 
+	 * @param dirPath the log directory
+	 * @param fileName
+	 */
+	public LogFile(String dirPath, String fileName){
+		createFile(dirPath, fileName);
+	}
 
 	/**
 	 * Create log file use the file name.
@@ -51,13 +60,19 @@ public class LogFile {
 	 * @param fileName
 	 *            file name.
 	 */
-	public LogFile(Context context, String fileName) {
-		createFile(fileName);
+	public LogFile(Context context, String dirPath, String fileName) {
+		createFile(dirPath, fileName);
 	}
 
-	private void createFile(String fileName) {
-		String path = LOG_FOLDER_NAME
-				+ File.separator + TimeUtil.getDate();
+	private void createFile(String dirPath, String fileName) {
+		String path = "";
+		if (dirPath == null) {
+			path = LOG_FOLDER_NAME
+					+ File.separator + TimeUtil.getDate();
+		} else {
+			path = dirPath + File.separator + TimeUtil.getDate();
+		}
+		
 		String filePath = path + File.separator + fileName;
 		mFile = new File(filePath);
 		if (!mFile.exists()) {

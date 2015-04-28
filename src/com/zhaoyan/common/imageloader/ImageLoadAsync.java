@@ -34,7 +34,6 @@ public class ImageLoadAsync extends MediaAsync<String,String, String>{
 		.resize(mWidth, mWidth)
 		.centerCrop().placeholder(R.drawable.photo_l)
 		.into(mImageView);
-
 	}
 
 }

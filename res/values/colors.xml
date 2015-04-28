@@ -14,4 +14,9 @@
     <color name="holo_blue_light">#ff33b5e5</color>
     <color name="holo_blue_light_transparent">#3f33b5e5</color>
     <color name="holo_blue_light_transparent2">#7f33b5e5</color>
+    
+    <color name="red">#FFC93437</color>
+    <color name="blue">#FF375BF1</color>
+    <color name="yellow">#FFF7D23E</color>
+    <color name="green">#FF34A350</color>
 </resources>

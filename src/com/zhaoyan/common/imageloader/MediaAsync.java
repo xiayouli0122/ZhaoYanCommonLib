@@ -294,7 +294,6 @@ public abstract class MediaAsync<Params, Progress, Result> {
 			 public Result call() throws Exception {
 				 mTaskInvoked.set(true);
 
-				 //                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 				 Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 				 //noinspection unchecked
 				 return postResult(doInBackground(mParams));
