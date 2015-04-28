@@ -11,4 +11,7 @@
     	<string name="dialog_type_image">图像</string>
     	
     	<string name="deleting">正在删除...</string>
+    	
+    	<string name="file_rename_error_1">命名错误：文件名不能包含“%1s”</string>
+    	<string name="file_rename_error_2">命名错误：文件名不能是“%1s”</string>
 </resources>

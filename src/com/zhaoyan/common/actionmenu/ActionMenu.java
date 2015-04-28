@@ -34,6 +34,7 @@ public class ActionMenu{
 	public static final int ACTION_MENU_CANCEL_RECEIVE = 0x22;
 	public static final int ACTION_MENU_CAPTURE = 0x23;
 	public static final int ACTION_MENU_PICK_PICTURE = 0x24;
+	public static final int ACTION_MENU_SHARE = 0x25;
 	
 	//action menu mode,edit is menu mode
 	public static final int MODE_NORMAL = 0;

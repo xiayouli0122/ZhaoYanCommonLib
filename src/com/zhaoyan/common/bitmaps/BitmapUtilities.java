@@ -1,8 +1,11 @@
 package com.zhaoyan.common.bitmaps;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
@@ -217,4 +220,40 @@ public class BitmapUtilities {
 		}
 		return null;
 	}
+	
+	/**
+     * Save bitmap to sdcard
+     * @param bitmap
+     * @param path the bitmap need to save location
+     */
+    private void saveBitmapToSdcard(String path, Bitmap bitmap){
+        File file = new File(path);
+        if(!file.exists()){//如果目录不存在就创建目录
+            file.mkdir();
+        }
+        FileOutputStream out = null;
+        try{
+            out = new FileOutputStream(file);
+            if(bitmap != null){
+                /*
+                 * 三个参数的含义分别是：
+                 * 1.保存图片的格式
+                 * 2.标识图片质量0~100.质量越小压缩的越小（这里设置100标识不压缩）。另外如果图片是png格式，压缩是无损的，将忽略此参数（设置无效）
+                 * 3.向OutputStream写入图片数据
+                 */
+                bitmap.compress(CompressFormat.JPEG, 100, out);
+                out.flush();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try{
+                if(out != null){
+                    out.close();
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
 }

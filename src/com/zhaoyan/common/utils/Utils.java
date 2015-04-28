@@ -1,5 +1,6 @@
 package com.zhaoyan.common.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,6 +16,10 @@ import java.util.Set;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.StatFs;
@@ -256,6 +261,26 @@ public class Utils {
 	public static String getParentPath(String path){
 		File file = new File(path);
 		return file.getParent();
+	}
+	
+	/**Drawable convert to byte */
+	public static synchronized byte[] drawableToByte(Drawable drawable) {
+		if (drawable != null) {
+			Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
+					drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
+			Canvas canvas = new Canvas(bitmap);
+			drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+			drawable.draw(canvas);
+			int size = bitmap.getWidth() * bitmap.getHeight() * 4;
+			// 创建字节数组输出流的大小为size
+			ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
+			// 设置位图的压缩格式，质量�?00%，并放入字节数组输出流中
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+			// 将字节数组输出流转化为字节数组byte[]
+			byte[] imagedata = baos.toByteArray();
+			return imagedata;
+		}
+		return null;
 	}
 	
 }
